@@ -8,7 +8,7 @@ import com.bombadu.mvvm5.db.NoteDao
 
 class NoteRepository(private val noteDao: NoteDao) {
     //private val allNotes: LiveData<List<Note>> = noteDao.getAllNotes()
-    val getNotes: LiveData<List<Note>> = noteDao.getAllNotes()
+    val allNotes: LiveData<List<Note>> = noteDao.getAllNotes()
 
 
     fun insert(note: Note){

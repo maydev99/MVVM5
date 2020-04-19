@@ -8,8 +8,7 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "notes_table")
 data class Note(
 
-    @PrimaryKey(autoGenerate = true)
-    var id: Int = 0,
+    @PrimaryKey
 
     @ColumnInfo(name = "title") var title: String,
 
