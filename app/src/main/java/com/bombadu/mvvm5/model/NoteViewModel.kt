@@ -8,6 +8,7 @@ import com.bombadu.mvvm5.db.Note
 import com.bombadu.mvvm5.db.NoteDatabase
 import com.bombadu.mvvm5.repository.NoteRepository
 import kotlinx.coroutines.launch
+import java.text.FieldPosition
 
 
 class NoteViewModel (application: Application) : AndroidViewModel(application) {
@@ -24,7 +25,7 @@ class NoteViewModel (application: Application) : AndroidViewModel(application) {
 
 
 
-    fun insert(note: Note) = viewModelScope.launch  {
+    fun insert(note: Note)  {
         repository.insert(note)
     }
 

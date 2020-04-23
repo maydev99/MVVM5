@@ -69,8 +69,9 @@ class MainActivity : AppCompatActivity() {
                 //noteViewModel.deleteNote(adapter.getNoteAt(viewHolder.adapterPosition))
                 //
                 //noteViewModel.delete(adapter.getNoteAt(viewHolder.getAdapterPosition()));
-                val noteToDelete = adapter.getNoteAt(0)
-                //noteViewModel.deleteNote(noteToDelete)
+
+                val position = viewHolder.adapterPosition
+                adapter.getNoteAt(viewHolder.adapterPosition)?.let { noteViewModel.deleteNote(it) }
                 Toast.makeText(this@MainActivity, "Note Deleted", Toast.LENGTH_SHORT).show()
             }
         }).attachToRecyclerView(recycler_view)

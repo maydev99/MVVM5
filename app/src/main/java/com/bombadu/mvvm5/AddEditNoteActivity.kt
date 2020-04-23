@@ -25,6 +25,7 @@ class AddEditNoteActivity : AppCompatActivity() {
         number_picker_priority.minValue = 1
         number_picker_priority.maxValue = 10
 
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -54,6 +55,7 @@ class AddEditNoteActivity : AppCompatActivity() {
             putExtra(EXTRA_TITLE, edit_text_title.text.toString())
             putExtra(EXTRA_DESCRIPTION, edit_text_description.text.toString())
             putExtra(EXTRA_PRIORITY, priority)
+
         }
 
         setResult(Activity.RESULT_OK, data)

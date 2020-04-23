@@ -7,7 +7,7 @@ import com.bombadu.mvvm5.db.NoteDao
 
 
 class NoteRepository(private val noteDao: NoteDao) {
-    //private val allNotes: LiveData<List<Note>> = noteDao.getAllNotes()
+
     val allNotes: LiveData<List<Note>> = noteDao.getAllNotes()
 
 
@@ -34,6 +34,7 @@ class NoteRepository(private val noteDao: NoteDao) {
 
         override fun doInBackground(vararg note: Note?) {
             noteDao.insert(note[0]!!)
+
         }
     }
 

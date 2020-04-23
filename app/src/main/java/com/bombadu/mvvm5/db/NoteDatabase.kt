@@ -29,7 +29,7 @@ abstract class NoteDatabase : RoomDatabase() {
 
         fun populateDatabase(noteDao: NoteDao) {
             val thread = Thread {
-                val myNote = Note( "Title 1", "Description 1", 1)
+                val myNote = Note("Title 1", "Description 1", 1)
                 noteDao.insert(myNote)
             }
             thread.start()

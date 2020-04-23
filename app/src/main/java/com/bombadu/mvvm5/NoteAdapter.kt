@@ -7,9 +7,11 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bombadu.mvvm5.db.Note
 
-class NoteAdapter : RecyclerView.Adapter<NoteAdapter.NoteHolder>() {
+
+class NoteAdapter : RecyclerView.Adapter<NoteAdapter.NoteHolder>(), View.OnClickListener {
 
     private var notes: List<Note> = ArrayList()
+
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoteAdapter.NoteHolder {
@@ -28,22 +30,37 @@ class NoteAdapter : RecyclerView.Adapter<NoteAdapter.NoteHolder>() {
         holder.textViewDescription.text = currentNote.description
         holder.textViewPriority.text = ("${currentNote.priority}")
 
+
+
     }
+
+    fun getNoteAt(position: Int): Note? {
+        return notes[position]
+    }
+
+
 
     fun setNotes(notes: List<Note>) {
         this.notes = notes
         notifyDataSetChanged()
     }
 
-    fun getNoteAt(position: Int): Long {
-        return  getItemId(position)
-    }
+
 
 
     inner class NoteHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var textViewTitle: TextView = itemView.findViewById(R.id.text_view_title)
         var textViewDescription: TextView = itemView.findViewById(R.id.text_view_description)
         var textViewPriority: TextView = itemView.findViewById(R.id.text_view_priority)
+
+
+
+
+
+
+    }
+
+    override fun onClick(p0: View?) {
 
     }
 
