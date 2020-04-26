@@ -3,6 +3,7 @@ package com.bombadu.mvvm5
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
@@ -17,7 +18,7 @@ import com.bombadu.mvvm5.model.NoteViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), NoteAdapter.ItemClickCallback {
 
     private lateinit var noteViewModel: NoteViewModel
     private val adapter = NoteAdapter()
@@ -55,6 +56,8 @@ class MainActivity : AppCompatActivity() {
             allNotes?.let { adapter.setNotes(it) }
         })
 
+        //adapter.setItemClickCallback(this@MainActivity)
+
         ItemTouchHelper(object :
             ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
             override fun onMove(
@@ -66,17 +69,18 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                //noteViewModel.deleteNote(adapter.getNoteAt(viewHolder.adapterPosition))
-                //
-                //noteViewModel.delete(adapter.getNoteAt(viewHolder.getAdapterPosition()));
-
-                val position = viewHolder.adapterPosition
                 adapter.getNoteAt(viewHolder.adapterPosition)?.let { noteViewModel.deleteNote(it) }
                 Toast.makeText(this@MainActivity, "Note Deleted", Toast.LENGTH_SHORT).show()
             }
         }).attachToRecyclerView(recycler_view)
 
+
+        adapter.setItemClickCallback(this@MainActivity)
+
+
     }
+
+
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.main_menu, menu)
@@ -101,6 +105,7 @@ class MainActivity : AppCompatActivity() {
                 data.getStringExtra(AddEditNoteActivity.EXTRA_TITLE),
                 data.getStringExtra(AddEditNoteActivity.EXTRA_DESCRIPTION),
                 data.getIntExtra(AddEditNoteActivity.EXTRA_PRIORITY, 1)
+
             )
 
             noteViewModel.insert(newNote)
@@ -113,7 +118,21 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         private const val ADD_NOTE_REQUEST = 1
+        private const val EDIT_NOTE_REQUEST = 2
     }
+
+    override fun onItemClick(p: Int) {
+        val myNote = adapter.getNoteAt(p)
+        Log.i("NOTE", "$myNote")
+
+      /* val intent = Intent(this, AddEditNoteActivity::class.java)
+       intent.putExtra("title_key", myNote?.title)
+       intent.putExtra("description_key", myNote?.description)
+       intent.putExtra("priority_key", myNote?.priority)
+       intent.putExtra("id_key", myNote?.id)
+       startActivityForResult(intent, EDIT_NOTE_REQUEST)*/
+    }
+
 
 
 }

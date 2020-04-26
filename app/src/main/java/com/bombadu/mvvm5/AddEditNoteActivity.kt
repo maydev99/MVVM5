@@ -15,6 +15,7 @@ class AddEditNoteActivity : AppCompatActivity() {
         const val EXTRA_TITLE ="com.bombadu.mvvm4.EXTRA_TITLE"
         const val EXTRA_DESCRIPTION ="com.bombadu.mvvm4.EXTRA_DESCRIPTION"
         const val EXTRA_PRIORITY ="com.bombadu.mvvm4.EXTRA_PRIORITY"
+        const val EXTRA_ID ="com.bombadu.mvvm4.EXTRA_ID"
 
     }
 
@@ -22,8 +23,17 @@ class AddEditNoteActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_note)
         supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_close)
+        title = "Add Note"
         number_picker_priority.minValue = 1
         number_picker_priority.maxValue = 10
+
+        val intent = intent
+        if (intent.hasExtra(EXTRA_ID)) {
+            title = "Edit Note"
+
+        }
+
+
 
 
     }

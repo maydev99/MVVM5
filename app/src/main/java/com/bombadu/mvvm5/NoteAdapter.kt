@@ -1,16 +1,31 @@
 package com.bombadu.mvvm5
 
+import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bombadu.mvvm5.db.Note
+import kotlinx.coroutines.withContext
 
 
-class NoteAdapter : RecyclerView.Adapter<NoteAdapter.NoteHolder>(), View.OnClickListener {
+class NoteAdapter : RecyclerView.Adapter<NoteAdapter.NoteHolder>() {
 
     private var notes: List<Note> = ArrayList()
+    private var itemClickCallback: ItemClickCallback? = null
+    //private var listener: AdapterView.OnItemClickListener? = null
+
+
+    internal interface ItemClickCallback {
+        fun onItemClick(p: Int)
+    }
+
+    internal fun setItemClickCallback(inItemClickCallback: ItemClickCallback) {
+        this.itemClickCallback = inItemClickCallback
+    }
 
 
 
@@ -47,8 +62,9 @@ class NoteAdapter : RecyclerView.Adapter<NoteAdapter.NoteHolder>(), View.OnClick
 
 
 
+    inner class NoteHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
+        View.OnClickListener {
 
-    inner class NoteHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var textViewTitle: TextView = itemView.findViewById(R.id.text_view_title)
         var textViewDescription: TextView = itemView.findViewById(R.id.text_view_description)
         var textViewPriority: TextView = itemView.findViewById(R.id.text_view_priority)
@@ -58,11 +74,26 @@ class NoteAdapter : RecyclerView.Adapter<NoteAdapter.NoteHolder>(), View.OnClick
 
 
 
+        init {
+            itemView.setOnClickListener {
+                val noteItem: View = itemView.findViewById(R.id.noteItem)
+                noteItem.setOnClickListener(this)
+            }
+        }
+
+        override fun onClick(view: View?) {
+            if(view!!.id == R.id.noteItem) {
+                itemClickCallback!!.onItemClick(adapterPosition)
+            }
+
+        }
+
+
     }
-
-    override fun onClick(p0: View?) {
-
-    }
-
 
 }
+
+
+
+
+
