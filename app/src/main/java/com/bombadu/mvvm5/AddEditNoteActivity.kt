@@ -23,14 +23,18 @@ class AddEditNoteActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_note)
         supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_close)
-        title = "Add Note"
         number_picker_priority.minValue = 1
         number_picker_priority.maxValue = 10
 
         val intent = intent
         if (intent.hasExtra(EXTRA_ID)) {
             title = "Edit Note"
+            edit_text_title.setText(intent.getStringExtra(EXTRA_TITLE))
+            edit_text_description.setText(intent.getStringExtra(EXTRA_DESCRIPTION))
+            number_picker_priority.value = intent.getIntExtra(EXTRA_PRIORITY, 1)
 
+        } else {
+            title = "Add Note"
         }
 
 
@@ -66,9 +70,15 @@ class AddEditNoteActivity : AppCompatActivity() {
             putExtra(EXTRA_DESCRIPTION, edit_text_description.text.toString())
             putExtra(EXTRA_PRIORITY, priority)
 
+            val id = intent.getIntExtra(EXTRA_ID, -1)
+            if (id != -1) {
+                putExtra(EXTRA_ID, id)
+            }
+
         }
 
         setResult(Activity.RESULT_OK, data)
         finish()
+
     }
 }

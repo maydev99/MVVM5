@@ -7,11 +7,9 @@ import androidx.lifecycle.viewModelScope
 import com.bombadu.mvvm5.db.Note
 import com.bombadu.mvvm5.db.NoteDatabase
 import com.bombadu.mvvm5.repository.NoteRepository
-import kotlinx.coroutines.launch
-import java.text.FieldPosition
 
 
-class NoteViewModel (application: Application) : AndroidViewModel(application) {
+class NoteViewModel(application: Application) : AndroidViewModel(application) {
 
     private val repository: NoteRepository
     private var allNotes: LiveData<List<Note>>
@@ -23,22 +21,24 @@ class NoteViewModel (application: Application) : AndroidViewModel(application) {
     }
 
 
-
-
-    fun insert(note: Note)  {
+    fun insert(note: Note) {
         repository.insert(note)
     }
 
-    fun deleteAllNotes(){
+    fun deleteAllNotes() {
         repository.deleteAllNotes()
     }
 
-    fun deleteNote(note: Note){
+    fun deleteNote(note: Note) {
         repository.delete(note)
     }
 
     fun getAllNotes(): LiveData<List<Note>> {
         return allNotes
+    }
+
+    fun update(note: Note) {
+        repository.update(note)
     }
 
 

@@ -17,6 +17,7 @@ class NoteAdapter : RecyclerView.Adapter<NoteAdapter.NoteHolder>() {
     private var notes: List<Note> = ArrayList()
     private var itemClickCallback: ItemClickCallback? = null
     //private var listener: AdapterView.OnItemClickListener? = null
+    var onItemClick: ((pos: Int, view: View) -> Unit)? = null
 
 
     internal interface ItemClickCallback {
@@ -64,6 +65,14 @@ class NoteAdapter : RecyclerView.Adapter<NoteAdapter.NoteHolder>() {
 
     inner class NoteHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
         View.OnClickListener {
+        override fun onClick(v: View) {
+            onItemClick?.invoke(adapterPosition, v)
+        }
+        //val tvTitle = itemView.findViewById<TextView>(R.id.tv_cat_title)
+
+        init {
+            itemView.setOnClickListener(this)
+        }
 
         var textViewTitle: TextView = itemView.findViewById(R.id.text_view_title)
         var textViewDescription: TextView = itemView.findViewById(R.id.text_view_description)
@@ -74,19 +83,19 @@ class NoteAdapter : RecyclerView.Adapter<NoteAdapter.NoteHolder>() {
 
 
 
-        init {
+        /*init {
             itemView.setOnClickListener {
                 val noteItem: View = itemView.findViewById(R.id.noteItem)
                 noteItem.setOnClickListener(this)
             }
-        }
+        }*/
 
-        override fun onClick(view: View?) {
+        /*override fun onClick(view: View?) {
             if(view!!.id == R.id.noteItem) {
                 itemClickCallback!!.onItemClick(adapterPosition)
             }
 
-        }
+        }*/
 
 
     }

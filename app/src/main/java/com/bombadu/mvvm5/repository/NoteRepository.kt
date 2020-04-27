@@ -30,6 +30,13 @@ class NoteRepository(private val noteDao: NoteDao) {
     }
 
 
+    fun update(note: Note) {
+        UpdateNoteAsyncTask(
+            noteDao
+        ).execute(note)
+    }
+
+
     private class InsertNoteAsyncTask(val noteDao: NoteDao) : AsyncTask<Note, Unit, Unit>() {
 
         override fun doInBackground(vararg note: Note?) {
@@ -50,6 +57,14 @@ class NoteRepository(private val noteDao: NoteDao) {
 
         override fun doInBackground(vararg note: Note?) {
             noteDao.delete(note[0]!!)
+        }
+    }
+
+    private class UpdateNoteAsyncTask(val noteDao: NoteDao) : AsyncTask<Note, Unit, Unit>() {
+
+        override fun doInBackground(vararg note: Note?) {
+            noteDao.update(note[0]!!)
+
         }
     }
 

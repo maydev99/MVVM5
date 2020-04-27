@@ -3,7 +3,6 @@ package com.bombadu.mvvm5
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
@@ -18,7 +17,7 @@ import com.bombadu.mvvm5.model.NoteViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 
 
-class MainActivity : AppCompatActivity(), NoteAdapter.ItemClickCallback {
+class MainActivity : AppCompatActivity() {
 
     private lateinit var noteViewModel: NoteViewModel
     private val adapter = NoteAdapter()
@@ -31,11 +30,11 @@ class MainActivity : AppCompatActivity(), NoteAdapter.ItemClickCallback {
 
 
         noteViewModel.getAllNotes().observe(this,
-        Observer { list ->
-            list?.let {
-                adapter.setNotes(it)
-            }
-        })
+            Observer { list ->
+                list?.let {
+                    adapter.setNotes(it)
+                }
+            })
 
 
         button_add_note.setOnClickListener {
@@ -75,12 +74,20 @@ class MainActivity : AppCompatActivity(), NoteAdapter.ItemClickCallback {
         }).attachToRecyclerView(recycler_view)
 
 
-        adapter.setItemClickCallback(this@MainActivity)
+        //adapter.setItemClickCallback(this@MainActivity)
+        adapter.onItemClick = { pos, _ ->
+            //Log.i("POSITION", "Position: $pos")
+            val myNote = adapter.getNoteAt(pos)
 
+            intent = Intent(this, AddEditNoteActivity::class.java)
+            intent.putExtra(AddEditNoteActivity.EXTRA_TITLE, myNote!!.title)
+            intent.putExtra(AddEditNoteActivity.EXTRA_DESCRIPTION, myNote.description)
+            intent.putExtra(AddEditNoteActivity.EXTRA_PRIORITY, myNote.priority)
+            intent.putExtra(AddEditNoteActivity.EXTRA_ID, myNote.id)
+            startActivityForResult(intent, EDIT_NOTE_REQUEST)
 
+        }
     }
-
-
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.main_menu, menu)
@@ -114,25 +121,31 @@ class MainActivity : AppCompatActivity(), NoteAdapter.ItemClickCallback {
         } else {
             Toast.makeText(this, "Note not saved!", Toast.LENGTH_SHORT).show()
         }
+
+        if (requestCode == EDIT_NOTE_REQUEST && resultCode == Activity.RESULT_OK) {
+            val id  = data?.getIntExtra(AddEditNoteActivity.EXTRA_ID, -1)
+            if (id == -1) {
+                Toast.makeText(this, "Note can't be updated", Toast.LENGTH_SHORT).show()
+                return
+            }
+
+            val updatedTitle = data?.getStringExtra(AddEditNoteActivity.EXTRA_TITLE)
+            val updatedDescription = data?.getStringExtra(AddEditNoteActivity.EXTRA_DESCRIPTION)
+            val updatedPriority = data?.getIntExtra(AddEditNoteActivity.EXTRA_PRIORITY, 1)
+            val updatedNote = Note(updatedTitle!!, updatedDescription!!, updatedPriority!!)
+            if (id != null) {
+                updatedNote.id = id
+            }
+            noteViewModel.update(updatedNote)
+            Toast.makeText(this, "Note updated", Toast.LENGTH_SHORT).show()
+        } else {
+            Toast.makeText(this, "Note not saved", Toast.LENGTH_SHORT).show()
+        }
     }
 
     companion object {
         private const val ADD_NOTE_REQUEST = 1
         private const val EDIT_NOTE_REQUEST = 2
     }
-
-    override fun onItemClick(p: Int) {
-        val myNote = adapter.getNoteAt(p)
-        Log.i("NOTE", "$myNote")
-
-      /* val intent = Intent(this, AddEditNoteActivity::class.java)
-       intent.putExtra("title_key", myNote?.title)
-       intent.putExtra("description_key", myNote?.description)
-       intent.putExtra("priority_key", myNote?.priority)
-       intent.putExtra("id_key", myNote?.id)
-       startActivityForResult(intent, EDIT_NOTE_REQUEST)*/
-    }
-
-
 
 }
